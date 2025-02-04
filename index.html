@@ -3,48 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3 Tarjetas por Fila</title>
+    <title>9 Tarjetas Simples</title>
     <style>
         body {
             margin: 0;
-            font-family: system-ui, sans-serif;
-            background: #f8f9fa;
-            color: #212529;
+            font-family: Arial, sans-serif;
+            background: #f5f6fa;
+            color: #2d3436;
         }
 
         .contenedor {
             display: grid;
-            grid-template-columns: repeat(3, minmax(300px, 1fr));
-            gap: 1.5rem;
-            padding: 2rem;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            padding: 30px;
             max-width: 1200px;
             margin: 0 auto;
         }
 
         .tarjeta {
             background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
 
         .miniatura {
-            height: 150px;
-            background: #e9ecef;
+            height: 120px;
+            background: #dcdde1 url('https://definicion.de/wp-content/uploads/2010/05/online.png') center/cover;
+            border-radius: 10px 10px 0 0;
         }
 
         .contenido {
-            padding: 1.5rem;
+            padding: 15px;
         }
 
         .contenido p {
-            margin: 0 0 12px;
-            color: #495057;
-            line-height: 1.5;
+            margin: 0 0 10px;
+            color: #636e72;
+            font-size: 0.95em;
+            line-height: 1.4;
         }
 
         .pie {
-            padding: 1rem 1.5rem;
+            padding: 12px 15px;
             border-top: 1px solid #eee;
             display: flex;
             justify-content: space-between;
@@ -53,36 +54,31 @@
 
         .botones {
             display: flex;
-            gap: 0.75rem;
+            gap: 10px;
         }
 
         .boton {
-            padding: 8px 16px;
+            padding: 6px 12px;
             border: none;
-            border-radius: 6px;
+            border-radius: 4px;
             cursor: pointer;
             font-size: 0.9em;
-            transition: opacity 0.2s;
-        }
-
-        .boton:hover {
-            opacity: 0.85;
         }
 
         .ver {
-            background: #1976d2;
+            background: #0984e3;
             color: white;
         }
 
         .editar {
-            background: #6c757d;
+            background: #00b894;
             color: white;
         }
 
         @media (max-width: 900px) {
             .contenedor {
                 grid-template-columns: 1fr;
-                padding: 1rem;
+                padding: 15px;
             }
         }
     </style>
@@ -92,111 +88,135 @@
         <div class="tarjeta">
             <div class="miniatura"></div>
             <div class="contenido">
-                <p>Tarjeta de contenido ejemplo con texto descriptivo básico para mostrar en el layout.</p>
-                <p>Segundo párrafo de contenido adicional.</p>
+                <p>Contenido de ejemplo para la tarjeta con texto descriptivo básico.</p>
+                <p>Segundo párrafo informativo adicional.</p>
             </div>
             <div class="pie">
                 <div class="botones">
                     <button class="boton ver">Ver</button>
                     <button class="boton editar">Editar</button>
                 </div>
-                <span>5 min</span>
+                <span>3 min</span>
             </div>
         </div>
 
         <div class="tarjeta">
             <div class="miniatura"></div>
             <div class="contenido">
-                <p>Tarjeta de contenido ejemplo con texto descriptivo básico para mostrar en el layout.</p>
-                <p>Segundo párrafo de contenido adicional.</p>
+                <p>Contenido de ejemplo para la tarjeta con texto descriptivo básico.</p>
+                <p>Segundo párrafo informativo adicional.</p>
             </div>
             <div class="pie">
                 <div class="botones">
                     <button class="boton ver">Ver</button>
                     <button class="boton editar">Editar</button>
                 </div>
-                <span>5 min</span>
+                <span>3 min</span>
             </div>
         </div>
 
         <div class="tarjeta">
             <div class="miniatura"></div>
             <div class="contenido">
-                <p>Tarjeta de contenido ejemplo con texto descriptivo básico para mostrar en el layout.</p>
-                <p>Segundo párrafo de contenido adicional.</p>
+                <p>Contenido de ejemplo para la tarjeta con texto descriptivo básico.</p>
+                <p>Segundo párrafo informativo adicional.</p>
             </div>
             <div class="pie">
                 <div class="botones">
                     <button class="boton ver">Ver</button>
                     <button class="boton editar">Editar</button>
                 </div>
-                <span>5 min</span>
+                <span>3 min</span>
             </div>
         </div>
+
         <div class="tarjeta">
             <div class="miniatura"></div>
             <div class="contenido">
-                <p>Tarjeta de contenido ejemplo con texto descriptivo básico para mostrar en el layout.</p>
-                <p>Segundo párrafo de contenido adicional.</p>
+                <p>Contenido de ejemplo para la tarjeta con texto descriptivo básico.</p>
+                <p>Segundo párrafo informativo adicional.</p>
             </div>
             <div class="pie">
                 <div class="botones">
                     <button class="boton ver">Ver</button>
                     <button class="boton editar">Editar</button>
                 </div>
-                <span>5 min</span>
+                <span>3 min</span>
             </div>
-        </div><div class="tarjeta">
+        </div>
+
+        <div class="tarjeta">
             <div class="miniatura"></div>
             <div class="contenido">
-                <p>Tarjeta de contenido ejemplo con texto descriptivo básico para mostrar en el layout.</p>
-                <p>Segundo párrafo de contenido adicional.</p>
+                <p>Contenido de ejemplo para la tarjeta con texto descriptivo básico.</p>
+                <p>Segundo párrafo informativo adicional.</p>
             </div>
             <div class="pie">
                 <div class="botones">
                     <button class="boton ver">Ver</button>
                     <button class="boton editar">Editar</button>
                 </div>
-                <span>5 min</span>
+                <span>3 min</span>
             </div>
-        </div><div class="tarjeta">
+        </div>
+
+        <div class="tarjeta">
             <div class="miniatura"></div>
             <div class="contenido">
-                <p>Tarjeta de contenido ejemplo con texto descriptivo básico para mostrar en el layout.</p>
-                <p>Segundo párrafo de contenido adicional.</p>
+                <p>Contenido de ejemplo para la tarjeta con texto descriptivo básico.</p>
+                <p>Segundo párrafo informativo adicional.</p>
             </div>
             <div class="pie">
                 <div class="botones">
                     <button class="boton ver">Ver</button>
                     <button class="boton editar">Editar</button>
                 </div>
-                <span>5 min</span>
+                <span>3 min</span>
             </div>
-        </div><div class="tarjeta">
+        </div>
+
+        <div class="tarjeta">
             <div class="miniatura"></div>
             <div class="contenido">
-                <p>Tarjeta de contenido ejemplo con texto descriptivo básico para mostrar en el layout.</p>
-                <p>Segundo párrafo de contenido adicional.</p>
+                <p>Contenido de ejemplo para la tarjeta con texto descriptivo básico.</p>
+                <p>Segundo párrafo informativo adicional.</p>
             </div>
             <div class="pie">
                 <div class="botones">
                     <button class="boton ver">Ver</button>
                     <button class="boton editar">Editar</button>
                 </div>
-                <span>5 min</span>
+                <span>3 min</span>
             </div>
-        </div><div class="tarjeta">
+        </div>
+
+        <div class="tarjeta">
             <div class="miniatura"></div>
             <div class="contenido">
-                <p>Tarjeta de contenido ejemplo con texto descriptivo básico para mostrar en el layout.</p>
-                <p>Segundo párrafo de contenido adicional.</p>
+                <p>Contenido de ejemplo para la tarjeta con texto descriptivo básico.</p>
+                <p>Segundo párrafo informativo adicional.</p>
             </div>
             <div class="pie">
                 <div class="botones">
                     <button class="boton ver">Ver</button>
                     <button class="boton editar">Editar</button>
                 </div>
-                <span>5 min</span>
+                <span>3 min</span>
+            </div>
+        </div>
+
+        <div class="tarjeta">
+            <div class="miniatura"></div>
+            <div class="contenido">
+                <p>Contenido de ejemplo para la tarjeta con texto descriptivo básico.</p>
+                <p>Segundo párrafo informativo adicional.</p>
+            </div>
+            <div class="pie">
+                <div class="botones">
+                    <button class="boton ver">Ver</button>
+                    <button class="boton editar">Editar</button>
+                </div>
+                <span>3 min</span>
             </div>
         </div>
     </div>
