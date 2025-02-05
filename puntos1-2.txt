@@ -1,0 +1,45 @@
+    Punto 1: Identificación de Elementos <TAG> en el DOM
+Estructura principal:
+
+    <html>: Contenedor principal de la página web.
+
+    <body>: Contiene todo el contenido visible de la página.
+
+    <div class="contenedor">: Sección principal que organiza todas las tarjetas en un formato de grilla utilizando CSS Grid.
+
+Elementos dentro de cada tarjeta:
+
+    <div class="tarjeta">: Contenedor individual de cada tarjeta.
+
+    <div class="miniatura">: Imagen de encabezado que utiliza un fondo con una URL por defecto.
+
+    <div class="contenido">: Contiene los textos descriptivos.
+
+    <p>: Elemento de párrafo usado para texto informativo.
+
+    <div class="pie">: Pie de la tarjeta.
+
+    <div class="botones">: Contenedor de botones de acción.
+
+    <button class="boton ver">: Botón para la acción "Ver".
+
+    <button class="boton editar">: Botón para la acción "Editar".
+
+    <span>: Indica la duración o tiempo estimado ("3 min").
+
+Relación jerárquica:
+
+    Nivel 1: <body>
+
+    Nivel 2: <div class="contenedor">
+
+    Nivel 3: <div class="tarjeta">
+
+    Nivel 4:
+
+    <div class="miniatura">
+
+    <div class="contenido"> (con <p> como hijos).
+
+    <div class="pie"> (con <div class="botones"> y <span> como hijos).
+
