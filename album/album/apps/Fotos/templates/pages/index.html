@@ -1,0 +1,102 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% block title %}Galería{% endblock %}
+
+{% block content %}
+  <!-- Botón para abrir el modal de subida -->
+  <button class="boton" onclick="abrirModal()">Agregar Imagen</button>
+  
+  <!-- Modal para subir imagen -->
+  <div class="modal-overlay" id="modalOverlay" onclick="cerrarModal()"></div>
+  <div class="modal" id="modal">
+    <h2>Subir Imagen</h2>
+    <form id="uploadForm" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <label for="image">Imagen:</label>
+      <input type="file" id="image" name="imageurl" required>
+      <br>
+      <label for="descripcion1">Descripción 1:</label>
+      <input type="text" id="descripcion1" name="Descripcion1" required>
+      <br>
+      <label for="descripcion2">Descripción 2:</label>
+      <input type="text" id="descripcion2" name="Descripcion2" required>
+      <br>
+      <button type="submit" class="boton">Subir</button>
+    </form>
+    <button class="boton" onclick="cerrarModal()">Cerrar</button>
+  </div>
+  
+  <!-- Lista de imágenes -->
+  <div class="contenedor">
+    {% for imagen in imagenes %}
+      <div class="tarjeta" id="tarjeta-{{ imagen.id }}">
+        <img class="miniatura" src="{{ imagen.imageurl.url }}" alt="Imagen">
+        <div class="contenido">
+          <p>{{ imagen.Descripcion1 }}</p>
+          <p>{{ imagen.Descripcion2 }}</p>
+        </div>
+        <div class="pie">
+          <button class="boton eliminar" data-foto-id="{{ imagen.id }}">Eliminar</button>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  
+  <script>
+    // Funciones para abrir y cerrar el modal
+    function abrirModal() {
+      document.getElementById("modal").style.display = "block";
+      document.getElementById("modalOverlay").style.display = "block";
+    }
+    function cerrarModal() {
+      document.getElementById("modal").style.display = "none";
+      document.getElementById("modalOverlay").style.display = "none";
+    }
+  
+    // Envío del formulario de subida mediante fetch (AJAX)
+    document.getElementById("uploadForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+      let formData = new FormData(this);
+      fetch("{% url 'subir_foto' %}", {
+        method: "POST",
+        body: formData,
+        headers: {
+          "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          location.reload();
+        } else {
+          alert("Error al subir la imagen");
+        }
+      })
+      .catch(error => console.error("Error:", error));
+    });
+  
+    // Asignar la funcionalidad de eliminar a cada botón de eliminar
+    document.querySelectorAll('.boton.eliminar').forEach(function(boton) {
+      boton.addEventListener("click", function() {
+        if (confirm("¿Seguro que deseas eliminar esta imagen?")) {
+          let fotoId = this.getAttribute("data-foto-id");
+          // Se utiliza la URL para eliminar la foto, reemplazando el 0 por el id real
+          fetch("{% url 'eliminar_fotos' 0 %}".replace("0", fotoId), {
+            method: "GET", // Si prefieres POST, ajusta la vista y este método
+            headers: {
+              "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value
+            }
+          })
+          .then(response => {
+            if (response.ok) {
+              location.reload();
+            } else {
+              alert("Error al eliminar la imagen");
+            }
+          })
+          .catch(error => console.error("Error:", error));
+        }
+      });
+    });
+  </script>
+{% endblock %}

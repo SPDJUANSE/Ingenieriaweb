@@ -1,0 +1,113 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% block title %}Últimas Noticias EE.UU.-Ucrania{% endblock %}
+
+
+{% block content %}
+<body>
+  <header class="encabezado">
+    <h1>Últimas Noticias EE.UU. - Ucrania</h1>
+    <p>Seguimiento actualizado del conflicto y relaciones bilaterales</p>
+  </header>
+
+
+  <div style="text-align: center;">
+    <button class="boton" onclick="abrirModal()">Agregar Noticia</button>
+  </div>
+  
+
+  <div class="modal-overlay" id="modalOverlay" onclick="cerrarModal()"></div>
+  <div class="modal" id="modal">
+    <h2>Subir Noticia</h2>
+    <form id="uploadForm" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <label for="titulo">Título:</label>
+      <input type="text" id="titulo" name="Titulo" required>
+      
+      <label for="descripcion">Descripción:</label>
+      <textarea id="descripcion" name="descripcion" rows="3" required></textarea>
+      
+      <label for="palabra">Palabra clave:</label>
+      <input type="text" id="palabra" name="Palabra" required>
+      
+      <label for="imagen">Imagen:</label>
+      <input type="file" id="imagen" name="imageurl" required>
+      
+      <button type="submit" class="boton">Subir</button>
+    </form>
+    <button class="boton" onclick="cerrarModal()">Cerrar</button>
+  </div>
+  
+
+  <div class="contenedor">
+    {% for noticia in noticias %}
+      <article class="articulo" id="noticia-{{ noticia.id }}">
+        <span class="fecha">{{ noticia.date|date:"d 'de' F 'de' Y" }}</span>
+        <h2>{{ noticia.Titulo }}</h2>
+        <img src="{{ noticia.imageurl.url }}" class="imagen" alt="{{ noticia.Titulo }}">
+        <p class="resumen">{{ noticia.descripcion|truncatewords:20 }}</p>
+        <span class="etiqueta">{{ noticia.Palabra }}</span>
+        <button class="boton eliminar" data-noticia-id="{{ noticia.id }}">Eliminar</button>
+      </article>
+    {% endfor %}
+  </div>
+  
+  <footer class="pie">
+    <p>© 2023 Actualidad EE.UU.-Ucrania - Fuentes verificadas</p>
+  </footer>
+  
+  <script>
+    function abrirModal() {
+      document.getElementById("modal").style.display = "block";
+      document.getElementById("modalOverlay").style.display = "block";
+    }
+    function cerrarModal() {
+      document.getElementById("modal").style.display = "none";
+      document.getElementById("modalOverlay").style.display = "none";
+    }
+    
+    document.getElementById("uploadForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+      let formData = new FormData(this);
+      fetch("{% url 'subir_noticia' %}", {
+        method: "POST",
+        body: formData,
+        headers: {
+          "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          location.reload();
+        } else {
+          alert("Error al subir la noticia");
+        }
+      })
+      .catch(error => console.error("Error:", error));
+    });
+    
+    document.querySelectorAll('.boton.eliminar').forEach(function(boton) {
+      boton.addEventListener("click", function() {
+        if (confirm("¿Seguro que deseas eliminar esta noticia?")) {
+          let noticiaId = this.getAttribute("data-noticia-id");
+          fetch("{% url 'eliminar_noticias' 0 %}".replace("0", noticiaId), {
+            method: "GET", 
+            headers: {
+              "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value
+            }
+          })
+          .then(response => {
+            if (response.ok) {
+              location.reload();
+            } else {
+              alert("Error al eliminar la noticia");
+            }
+          })
+          .catch(error => console.error("Error:", error));
+        }
+      });
+    });
+  </script>
+</body>
+{% endblock %}

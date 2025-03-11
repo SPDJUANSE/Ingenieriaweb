@@ -1,0 +1,292 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} {% endblock %}</title>
+    <link rel="stylesheet" href="{% static '/css/styles.css' %}">
+    <style>
+      /* Reset y fuentes */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+      }
+      
+      body {
+        background: #f5f6fa;
+        color: #2d3436;
+        line-height: 1.6;
+        min-height: 100vh;
+      }
+      
+      /* ================================
+         CABECERAS Y FOOTER
+      ================================ */
+      .header, .encabezado {
+        background: #2c3e50;
+        color: #fff;
+        text-align: center;
+        padding: 1rem 25px;
+        border-bottom: 5px solid #ffd700;
+        margin-bottom: 1rem;
+      }
+      
+      footer.pie {
+        text-align: center;
+        padding: 1rem;
+        background: #2c3e50;
+        color: #fff;
+        margin-top: 20px;
+      }
+      
+      /* ================================
+         CONTENEDOR GENERAL Y GRID
+      ================================ */
+      .contenedor {
+        max-width: 1200px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 30px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+      
+      @media (max-width: 900px) {
+        .contenedor {
+          grid-template-columns: 1fr;
+          padding: 15px;
+        }
+      }
+      
+      /* ================================
+         BOTONES
+      ================================ */
+      .boton {
+        padding: 6px 12px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.9em;
+        background: #3498db;
+        color: #fff;
+        transition: background 0.3s, transform 0.2s;
+      }
+      
+      .boton:hover {
+        background: #2980b9;
+        transform: scale(1.05);
+      }
+      
+      /* ================================
+         MODAL Y OVERLAY
+      ================================ */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.6);
+        display: none;
+        z-index: 1000;
+      }
+      
+      .modal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #fff;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        max-width: 500px;
+        width: 90%;
+        display: none;
+        z-index: 1001;
+      }
+      
+      /* ================================
+         TARJETAS DE IMÁGENES
+      ================================ */
+      .tarjeta {
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .miniatura {
+        width: 100%;
+        height: 120px;
+        background: #dcdde1 url('https://definicion.de/wp-content/uploads/2010/05/online.png') center/cover;
+      }
+      
+      .contenido {
+        padding: 15px;
+        flex: 1;
+      }
+      
+      .contenido p {
+        margin-bottom: 10px;
+        color: #636e72;
+        font-size: 0.95em;
+        line-height: 1.4;
+      }
+      
+      .pie {
+        padding: 12px 15px;
+        border-top: 1px solid #eee;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+      }
+      
+      /* ================================
+         JUEGO DE MEMORIA (MEMORAMA)
+      ================================ */
+      .contador {
+        margin: 20px 0;
+        font-size: 1.2em;
+        color: #2c3e50;
+        text-align: center;
+      }
+      
+      .tablero {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+        max-width: 600px;
+        margin: 0 auto 20px auto;
+        padding: 20px;
+      }
+      
+      .carta {
+        width: 80px;
+        height: 80px;
+        background: #fff;
+        border-radius: 10px;
+        cursor: pointer;
+        position: relative;
+        transform-style: preserve-3d;
+        transition: transform 0.5s;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+      }
+      
+      .carta .cara {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backface-visibility: hidden;
+        font-size: 24px;
+        border-radius: 10px;
+      }
+      
+      .carta .frontal {
+        background: #3498db;
+        color: #fff;
+        transform: rotateY(180deg);
+      }
+      
+      .carta .trasera {
+        background: #ecf0f1;
+      }
+      
+      .carta.volteada {
+        transform: rotateY(180deg);
+      }
+      
+      .reiniciar {
+        padding: 10px 25px;
+        background: #2c3e50;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 20px auto 0 auto;
+        display: block;
+        transition: transform 0.2s, background 0.2s;
+      }
+      
+      .reiniciar:hover {
+        transform: scale(1.05);
+        background: #34495e;
+      }
+      
+      /* ================================
+         ARTÍCULOS DE NOTICIAS
+      ================================ */
+      .articulo {
+        background: #fff;
+        padding: 25px;
+        border-radius: 8px;
+        margin-bottom: 25px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        transition: transform 0.2s;
+      }
+      
+      .articulo:hover {
+        transform: translateY(-3px);
+      }
+      
+      .articulo .fecha {
+        color: #6c757d;
+        font-size: 0.9em;
+        margin-bottom: 10px;
+        display: block;
+      }
+      
+      .articulo h2 {
+        color: #2c3e50;
+        margin-bottom: 15px;
+      }
+      
+      .articulo .resumen {
+        color: #495057;
+        margin-bottom: 15px;
+      }
+      
+      .articulo .etiqueta {
+        display: inline-block;
+        background: #e9ecef;
+        padding: 5px 10px;
+        border-radius: 15px;
+        font-size: 0.8em;
+        color: #2c3e50;
+        margin-top: 10px;
+      }
+      
+      .articulo .imagen {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 5px;
+        margin: 15px 0;
+      }
+      
+</style>
+        
+        
+</head>
+<body>
+    
+    {% include "../includes/Header.html" %}
+    <main>
+        {% block content %}
+
+        {% endblock %}
+    </main> 
+    {% include "../includes/footer.html" %}
+
+    
+</body>
+</html>

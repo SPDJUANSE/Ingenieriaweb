@@ -1,0 +1,106 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% block title %}Title from index.html {% endblock %}
+
+
+
+{% block content %}
+<body>
+    <header class="encabezado">
+        <h1>Juego de Memoria</h1>
+    </header>
+
+    <div class="contador">Movimientos: <span id="movimientos">0</span></div>
+    
+    <div class="tablero" id="tablero"></div>
+    
+    <button class="reiniciar" onclick="iniciarJuego()">Reiniciar Juego</button>
+
+    <script>
+        const emojis = ['🎮', '🎲', '🎯', '🎨', '🧩', '🎭', '🪀', '🎪'];
+        let cartasVolteadas = [];
+        let movimientos = 0;
+        let bloqueado = false;
+
+        function crearTablero() {
+            const tablero = document.getElementById('tablero');
+            const pares = [...emojis, ...emojis];
+            pares.sort(() => Math.random() - 0.5);
+            
+            tablero.innerHTML = pares.map((emoji, index) => `
+                <div class="carta" data-emoji="${emoji}" onclick="voltearCarta(this)">
+                    <div class="cara frontal">${emoji}</div>
+                    <div class="cara trasera"></div>
+                </div>
+            `).join('');
+        }
+
+        function voltearCarta(carta) {
+            if(bloqueado || carta.classList.contains('volteada')) return;
+            
+            carta.classList.add('volteada');
+            cartasVolteadas.push(carta);
+            
+            if(cartasVolteadas.length === 2) {
+                bloquearJuego();
+                verificarPar();
+                actualizarMovimientos();
+            }
+        }
+
+        function verificarPar() {
+            const [carta1, carta2] = cartasVolteadas;
+            const emoji1 = carta1.dataset.emoji;
+            const emoji2 = carta2.dataset.emoji;
+            
+            if(emoji1 === emoji2) {
+                cartasVolteadas = [];
+                desbloquearJuego();
+                verificarVictoria();
+            } else {
+                setTimeout(() => {
+                    carta1.classList.remove('volteada');
+                    carta2.classList.remove('volteada');
+                    cartasVolteadas = [];
+                    desbloquearJuego();
+                }, 1000);
+            }
+        }
+
+        function actualizarMovimientos() {
+            movimientos++;
+            document.getElementById('movimientos').textContent = movimientos;
+        }
+
+        function verificarVictoria() {
+            const cartas = document.querySelectorAll('.carta');
+            const victoria = [...cartas].every(carta => 
+                carta.classList.contains('volteada'));
+            
+            if(victoria) {
+                setTimeout(() => {
+                    alert(`¡Ganaste en ${movimientos} movimientos!`);
+                }, 500);
+            }
+        }
+
+        function bloquearJuego() {
+            bloqueado = true;
+        }
+
+        function desbloquearJuego() {
+            bloqueado = false;
+        }
+
+        function iniciarJuego() {
+            movimientos = 0;
+            document.getElementById('movimientos').textContent = '0';
+            cartasVolteadas = [];
+            crearTablero();
+        }
+
+        // Iniciar juego al cargar
+        iniciarJuego();
+    </script>
+</body>
+{% endblock %}
