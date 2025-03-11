@@ -19,6 +19,8 @@ from django.urls import path
 #aca importamos las vistas de la app en este caso fotos por que solo es una pero si tu tambien quieres solo un url con muchas apps lo repites als veces que quieras
 from apps.Fotos import views
 
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     #bueno aca se linkean las urls con las vistas yo solo tengo esta pero puedes crear una por app y despues importar lo aca (me dio flojera pero seria una buena practica)
@@ -36,3 +38,6 @@ urlpatterns = [
     path('subir_noticia/', views.subir_noticia, name='subir_noticia'),
     path('eliminar_noticias/<int:noticia_id>/', views.eliminar_noticias, name='eliminar_noticias'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

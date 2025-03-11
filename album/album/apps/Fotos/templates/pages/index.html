@@ -3,15 +3,18 @@
 {% block title %}Galería{% endblock %}
 
 {% block content %}
-  <!-- Botón para abrir el modal de subida -->
+
+  <!-- Boton para abrir el popUp -->
   <button class="boton" onclick="abrirModal()">Agregar Imagen</button>
   
-  <!-- Modal para subir imagen -->
+  <!-- basicamente es el popUp -->
   <div class="modal-overlay" id="modalOverlay" onclick="cerrarModal()"></div>
   <div class="modal" id="modal">
     <h2>Subir Imagen</h2>
+    <!-- es importante que sea en un form para que el mismo html encapsule los atributos y despues se puedan mandar -->
     <form id="uploadForm" method="post" enctype="multipart/form-data">
-      {% csrf_token %}
+      <!-- token de seguridad que se necesita para enviar el formulario -->
+      {% csrf_token %} <!-- token de seguridad -->
       <label for="image">Imagen:</label>
       <input type="file" id="image" name="imageurl" required>
       <br>
@@ -26,10 +29,13 @@
     <button class="boton" onclick="cerrarModal()">Cerrar</button>
   </div>
   
-  <!-- Lista de imágenes -->
+  
   <div class="contenedor">
+    <!-- Se recorren las imagenes y se muestran en tarjetas esto es lo que le enviamos desde views ahora con un for recorremos y mostramos-->
     {% for imagen in imagenes %}
+      <!-- dejamos el id de la imagen para posterior mente poder eliminar la recuerda que para ello le pedimos el id a borrar -->
       <div class="tarjeta" id="tarjeta-{{ imagen.id }}">
+        <p>URL de la imagen: {{ imagen.imageurl.url }}</p>
         <img class="miniatura" src="{{ imagen.imageurl.url }}" alt="Imagen">
         <div class="contenido">
           <p>{{ imagen.Descripcion1 }}</p>
@@ -43,7 +49,7 @@
   </div>
   
   <script>
-    // Funciones para abrir y cerrar el modal
+    // Funciones para abrir y cerrar el popUp o modal como quieras llamar lo
     function abrirModal() {
       document.getElementById("modal").style.display = "block";
       document.getElementById("modalOverlay").style.display = "block";
@@ -53,17 +59,23 @@
       document.getElementById("modalOverlay").style.display = "none";
     }
   
-    // Envío del formulario de subida mediante fetch (AJAX)
+    // recogemos el formulario y le asignamos un evento submit para enviar los datos
     document.getElementById("uploadForm").addEventListener("submit", function(event) {
       event.preventDefault();
+      // creamos un objeto FormData para enviar los datos del formulario
       let formData = new FormData(this);
+      // enviamos los datos mediante fetch
       fetch("{% url 'subir_foto' %}", {
+        // metodo post para enviar los datos por que es un json y el token de seguridad
         method: "POST",
         body: formData,
         headers: {
+          // token de seguridad va en el header por que funciona como una api y necesita comprobar que seamos nosotros los que estamos enviando los datos
+          // los token suelen ir en el header
           "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value
         }
       })
+      // si todo sale bien recargamos la pagina
       .then(response => response.json())
       .then(data => {
         if (data.success) {
@@ -79,10 +91,12 @@
     document.querySelectorAll('.boton.eliminar').forEach(function(boton) {
       boton.addEventListener("click", function() {
         if (confirm("¿Seguro que deseas eliminar esta imagen?")) {
+          // obtenemos el id de la imagen que esta en el atributo data-foto-id
           let fotoId = this.getAttribute("data-foto-id");
-          // Se utiliza la URL para eliminar la foto, reemplazando el 0 por el id real
+          // hacemos una peticion fetch para eliminar la imagen y le mandamos en el link el id de la imagen
+          // basicamente donde esta el 0 va el id de la imagen lo remplazamos con el metodo .replace y le pasamos el id de la imagen en lugar de 0
           fetch("{% url 'eliminar_fotos' 0 %}".replace("0", fotoId), {
-            method: "GET", // Si prefieres POST, ajusta la vista y este método
+            method: "GET", // Si prefieres POST, cambia la logica en views y en urls para que acepte POST
             headers: {
               "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value
             }

@@ -5,7 +5,7 @@ from django.db import models
 class Galeria(models.Model):
     Descripcion1 = models.CharField(max_length=90)
     Descripcion2 = models.CharField(max_length=2000)
-    imageurl = models.CharField(max_length=120)
+    imageurl = models.ImageField(upload_to='fotos/')
     
     def __str__(self):
         return self.Descripcion1 #retorna el nombre de la imagen    
@@ -14,7 +14,7 @@ class Noticias(models.Model):
     Titulo = models.CharField(max_length=90)
     descripcion = models.CharField(max_length=2000)
     Palabra = models.CharField(max_length=2000)
-    imageurl = models.CharField(max_length=120)
+    imageurl = models.ImageField(upload_to='fotos/')
     date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
